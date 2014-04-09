@@ -18,4 +18,10 @@ SELECTIONS
 apt-get install -y postgresql-9.2-postgis-2.0
 
 # Add a PostgreSQL superuser
-su - postgres -c "createuser -ds vagrant"
+su - postgres -c "createuser -drs vagrant"
+su - postgres -c "echo \"ALTER ROLE vagrant ENCRYPTED PASSWORD 'vagrant';\" | psql"
+
+# Allow access from outside
+echo "listen_addresses = '*'" >> /etc/postgresql/9.2/main/postgresql.conf
+echo "host all all 10.0.0.0/8 md5" >> /etc/postgresql/9.2/main/pg_hba.conf
+service postgresql restart
